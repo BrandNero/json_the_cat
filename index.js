@@ -8,11 +8,3 @@ fetchBreedDescription(breedName, (error, desc) => {
     console.log(desc);
   }
 });
-// it("return an error as the breed is invalid/non-existent.", (done) => {
-//   fetchBreedDescription("husky", (err, desc) => {
-//     assert.equal(err, null);
-
-//     const expectedDesc = "Breed not found. Please try again.";
-//     assert.equal(expectedDesc, desc.trim());
-//     done();
-//   });
