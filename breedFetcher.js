@@ -1,23 +1,26 @@
 const request = require('request');
 
-const requestBreed = process.argv[2];
-request(`https://api.thecatapi.com/v1/breeds/search?q=${requestBreed}`, (error, response, body) => {
-  try {
-    if (error) {
-      console.log("Error occurred:", error);
-    }
-    if (response.statusCode !== 200) {
-      console.log("Breed not found. Please try again.");
-    }
-    {
+const fetchBreedDescription = function(breedName, callback) {
+  request(`https://api.thecatapi.com/v1/breeds/search?q=${breedName}`, (error, response, body) => {
+    try {
+      if (error) {
+        callback("Error occurred:", error);
+        return;
+      }
+      if (response.statusCode !== 200) {
+        callback("Breed not found. Please try again.");
+        return;
+      }
       const data = JSON.parse(body);
       if (data.length === 0) {
-        console.log("Breed not found. Please try again.");
+        callback("Breed not found. Please try again.");
+        return;
       }
-      console.log(data[0].description);
-      console.log(typeof data);
+      callback(null, data[0].description.trim());
+    } catch (error) {
+      callback("Error occurred while parsing JSON");
     }
-  } catch (error) {
-    console.log("Error occurred while parsing JSON");
-  }
-});
+  });
+};
+
+module.exports = fetchBreedDescription;
